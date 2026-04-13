@@ -22,22 +22,15 @@ Allowed event labels:
 4. Direct Entry of Saudi/UAE/Coalition Forces
 5. Red Sea / Bab el-Mandeb Escalation
 
-Scoring rules:
-- physical_score: 0.00 to 1.00
-- escalation_score: 0.00 to 1.00
-- evidence_score: 0.00 to 1.00
-- signal_score: 0.00 to 1.00
-- model_score: 0.00 to 1.00
-
 Calibration:
 - Pure rhetoric, threats, warnings, commentary, or hypotheticals should usually stay below 0.40 final risk.
 - High risk requires evidence of real operational disruption or credible widening of the conflict.
 - If ambiguous, be conservative.
 - Assign an event label only when the article provides enough evidence that the event is genuinely relevant.
 - If the article is mostly commentary or weakly related, return an empty event_labels list.
-
-Triage hint:
-{triage_hint}
+- keywords_detected should include only terms actually supported by the article.
+- rationale must be short and specific.
+- All scores must be between 0.00 and 1.00.
 
 Return only a valid JSON object.
 Do not use markdown.
@@ -56,12 +49,8 @@ Use exactly this schema:
   "keywords_detected": ["..."]
 }}
 
-Requirements:
-- event_labels must contain only the allowed labels listed above
-- event_labels may be empty
-- keywords_detected should include only terms actually supported by the article
-- rationale must be short and specific
-- All numeric scores must be between 0.00 and 1.00
+Triage hint:
+{triage_hint}
 
 Article:
 \"\"\"

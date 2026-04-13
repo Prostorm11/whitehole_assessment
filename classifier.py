@@ -20,18 +20,15 @@ def _extract_json(text: str) -> Dict[str, Any]:
     """
     text = text.strip()
 
-    # Case 1: fenced JSON block
     fenced_match = re.search(r"```(?:json)?\s*(\{.*\})\s*```", text, flags=re.DOTALL)
     if fenced_match:
         return json.loads(fenced_match.group(1))
 
-    # Case 2: raw JSON
     try:
         return json.loads(text)
     except json.JSONDecodeError:
         pass
 
-    # Case 3: extract first JSON object-looking region
     start = text.find("{")
     end = text.rfind("}")
     if start != -1 and end != -1 and end > start:
@@ -46,7 +43,7 @@ class ArticleClassifier:
             raise ValueError("OPENAI_API_KEY is not set.")
         self.client = OpenAI(api_key=OPENAI_API_KEY)
 
-    def classify(self, article_text: str, triage_hint: Dict) -> Dict[str, Any]:
+    def classify(self, article_text: str, triage_hint: Dict[str, Any]) -> Dict[str, Any]:
         prompt = build_classifier_prompt(article_text, triage_hint)
 
         response = self.client.responses.create(

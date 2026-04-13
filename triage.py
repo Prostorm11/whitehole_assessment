@@ -139,7 +139,6 @@ def compute_rule_score(text: str) -> Dict:
     total_score -= speculation_penalty
     matched_keywords.extend(speculative_hits)
 
-    # Prevent negative triage scores
     total_score = max(0, total_score)
 
     candidate_events = [

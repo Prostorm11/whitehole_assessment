@@ -30,7 +30,9 @@ def process_articles(input_path: str, output_path: str) -> None:
             output_event_labels.append("[]")
             output_risk_scores.append(0.00)
             output_confidence.append("low")
-            output_rationales.append("Rejected at triage as likely political noise or weak signal.")
+            output_rationales.append(
+                "Rejected at triage due to insufficient event signal or missing target-domain anchors."
+            )
             output_keywords_detected.append(safe_json_dumps(triage.keywords_detected))
             continue
 
@@ -39,11 +41,23 @@ def process_articles(input_path: str, output_path: str) -> None:
             "candidate_event_types": triage.candidate_event_types,
             "keywords_detected": triage.keywords_detected,
             "triage_score": triage.triage_score,
+            "domain_hit": triage.domain_hit,
+            "domain_keywords_detected": triage.domain_keywords_detected,
             "embedding_label": triage.embedding_label,
             "embedding_similarity": triage.embedding_similarity,
         }
 
-        result = classifier.classify(article_text, triage_hint)
+        try:
+            result = classifier.classify(article_text, triage_hint)
+        except Exception as exc:
+            output_event_labels.append("[]")
+            output_risk_scores.append(0.00)
+            output_confidence.append("low")
+            output_rationales.append(f"Classification failed: {str(exc)}")
+            output_keywords_detected.append(
+                safe_json_dumps(triage.keywords_detected)
+            )
+            continue
 
         physical_score = float(result["physical_score"])
         escalation_score = float(result["escalation_score"])
