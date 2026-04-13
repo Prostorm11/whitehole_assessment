@@ -16,6 +16,37 @@ TRIAGE_BORDERLINE_THRESHOLD = 2
 MAX_ARTICLE_CHARS_FOR_LLM = 12000
 MAX_ARTICLE_CHARS_FOR_EMBEDDING = 2500
 
+# Domain anchors ensure the article is actually in the target geopolitical context.
+# This prevents unrelated macro/news events from passing triage just because they
+# mention shipping, pipelines, sabotage, etc.
+DOMAIN_KEYWORDS = [
+    "iran",
+    "iranian",
+    "irgc",
+    "irgc navy",
+    "israel",
+    "israeli",
+    "us",
+    "u.s.",
+    "united states",
+    "houthis",
+    "houthi",
+    "strait of hormuz",
+    "hormuz",
+    "red sea",
+    "bab el-mandeb",
+    "saudi",
+    "uae",
+    "emirati",
+    "fujairah",
+    "abqaiq",
+    "ras tanura",
+    "kharg",
+    "khark",
+    "gulf",
+    "persian gulf",
+]
+
 EVENT_TAXONOMY: Dict[str, Dict[str, List[str]]] = {
     "Hormuz Closure": {
         "strong_keywords": [
